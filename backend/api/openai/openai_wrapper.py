@@ -77,7 +77,7 @@ Response format:
 
 {requirements}
 
-Format the PRD with these sections using markdown, keeping each section brief and focused only on the provided requirements:
+Format the PRD, keeping each section brief and focused only on the provided requirements:
 
 1. Overview (2-3 sentences)
 2. Requirements Breakdown

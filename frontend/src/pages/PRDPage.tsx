@@ -22,7 +22,6 @@ const PRDPage = () => {
     }
   }, [requirements]);
 
-  // Redirect if no requirements were passed
   if (!requirements) {
     return <Navigate to="/consult" replace />;
   }
@@ -78,54 +77,56 @@ const PRDPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <Card className="max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Product Requirements Document
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[600px] pr-4">
-            {loading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-8 w-3/4" />
-                <Skeleton className="h-24 w-full" />
-                <Skeleton className="h-8 w-2/3" />
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-8 w-3/4" />
-                <Skeleton className="h-24 w-full" />
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {parsedSections.map((section, index) => (
-                  <div key={index} className="space-y-4">
-                    <h2 className="text-xl font-semibold text-primary border-b border-primary/20 pb-2">
-                      {section.title}
-                    </h2>
-                    <div className="space-y-2 pl-4">
-                      {section.content.map((content, idx) => (
-                        <p key={idx} className="text-sm text-muted-foreground">
-                          {content.startsWith('-') ? (
-                            <span className="flex">
-                              <span className="text-primary mr-2">•</span>
-                              {content.replace('-', '').trim()}
-                            </span>
-                          ) : (
-                            content
-                          )}
-                        </p>
-                      ))}
+    <div className="min-h-screen bg-black text-white font-inter">
+      <div className="container mx-auto py-12 px-4 max-w-5xl">
+        <Card className="bg-zinc-900 border-zinc-800 shadow-2xl">
+          <CardHeader className="border-b border-zinc-800">
+            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+              Product Requirements Document
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <ScrollArea className="h-[700px]">
+              {loading ? (
+                <div className="space-y-6 p-6">
+                  <Skeleton className="h-8 w-3/4 bg-zinc-800" />
+                  <Skeleton className="h-24 w-full bg-zinc-800" />
+                  <Skeleton className="h-8 w-2/3 bg-zinc-800" />
+                  <Skeleton className="h-32 w-full bg-zinc-800" />
+                  <Skeleton className="h-8 w-3/4 bg-zinc-800" />
+                  <Skeleton className="h-24 w-full bg-zinc-800" />
+                </div>
+              ) : (
+                <div className="divide-y divide-zinc-800">
+                  {parsedSections.map((section, index) => (
+                    <div key={index} className="p-6 space-y-4">
+                      <h2 className="text-2xl font-semibold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                        {section.title}
+                      </h2>
+                      <div className="space-y-3">
+                        {section.content.map((content, idx) => (
+                          <p key={idx} className="text-zinc-400 leading-relaxed">
+                            {content.startsWith('-') ? (
+                              <span className="flex items-start">
+                                <span className="text-white mr-3 mt-1.5">•</span>
+                                <span>{content.replace('-', '').trim()}</span>
+                              </span>
+                            ) : (
+                              content
+                            )}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-        </CardContent>
-      </Card>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default PRDPage; 
+export default PRDPage;
