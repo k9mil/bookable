@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class CurrentState(BaseModel):
@@ -9,11 +9,16 @@ class CurrentState(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    current_state: CurrentState
+    current_state: Optional[CurrentState] = None
+    current_requirements: Optional[List[str]] = None
     user_message: str
 
 
 class ChatResponse(BaseModel):
     done: bool
     current_state: CurrentState
+    main_response: str
+
+class FinalState(BaseModel):
+    suggested_requirements: List[str]
     main_response: str
