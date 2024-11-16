@@ -44,6 +44,10 @@ export default {
           DEFAULT: "#222222",
           foreground: "#ffffff",
         },
+        success: {
+          DEFAULT: "#22c55e",
+          foreground: "#ffffff",
+        },
       },
       keyframes: {
         "fade-in": {

@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(openai_router, tags=["sample_router"])
+    app.include_router(openai_router, tags=["openai_router"])
 
     app.state.config = config
 

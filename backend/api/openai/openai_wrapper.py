@@ -108,6 +108,23 @@ Important:
 PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMENTS
 """
 
+        self.prd_to_json_prompt = """
+Please extract, and format the data you receive into this format. You need to abide by this format.
+THIS IS A JSON FORMAT.
+
+{
+	"requirements": [
+		"requirement1",
+		"requirement2",
+        ...
+	],
+	"timeline": [
+		"project_kickoff": "date,
+	],
+	"budget": budget,
+}
+"""
+
     def prompt_chat(
         self,
         current_state: dict,
@@ -172,6 +189,21 @@ PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMEN
             return str(chat_completion.choices[0].message.content)
         except Exception as e:
             raise Exception(f"Error generating PRD: {str(e)}")
+        
+    def prd_to_summary(self, prd: str) -> str:
+        try:
+            chat_completion = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": self.prd_to_json_prompt},
+                    {"role": "user", "content": prd}
+                ],
+                temperature=0.5,
+                max_tokens=1000
+            )
+            return str(chat_completion.choices[0].message.content)
+        except Exception as e:
+            raise Exception(f"Error generating PRD to JSON: {str(e)}")
 
     def transcribe_audio(self, buffer: BytesIO) -> str:
         transcription = self.client.audio.transcriptions.create(
