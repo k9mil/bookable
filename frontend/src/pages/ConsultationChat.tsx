@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
-import { SuggestionCard } from "@/components/SuggestionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
-import { PRDModal } from "@/components/PRDModal";
-import { Question, ProjectInfo } from "@/types/consultation";
 
 interface AIResponse {
+  done: boolean;
+  current_state: {
+    core_product_purpose: string | null;
+    key_stakeholders: string | null;
+    product_description: string | null;
+  };
   main_response: string;
-  suggestions?: string[];
 }
 
 const ConsultationChat = () => {
@@ -23,17 +25,15 @@ const ConsultationChat = () => {
     },
   ]);
   const [input, setInput] = useState("");
-  const [projectInfo, setProjectInfo] = useState<Partial<ProjectInfo>>({});
-  const [prdGenerated, setPrdGenerated] = useState(false);
-  const [showPRDModal, setShowPRDModal] = useState(false);
+  const [currentState, setCurrentState] = useState<AIResponse["current_state"]>(
+    {
+      core_product_purpose: null,
+      key_stakeholders: null,
+      product_description: null,
+    }
+  );
+  const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<
-    Array<{
-      id: number;
-      description: string;
-      visible: boolean;
-    }>
-  >([]);
 
   const sendMessageToAI = async (userMessage: string) => {
     try {
@@ -42,20 +42,22 @@ const ConsultationChat = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({
+          current_state: currentState,
+          user_message: userMessage,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get AI response");
+        throw new Error(`API error: ${response.status}`);
       }
 
       const data = await response.json();
-      const parsedResponse: AIResponse = JSON.parse(data.response);
-      return parsedResponse;
+      return data as AIResponse;
     } catch (error) {
       console.error("Error getting AI response:", error);
-      toast.error("Failed to get AI response");
-      throw error;
+      toast.error("Unable to fetch AI response.");
+      return null;
     }
   };
 
@@ -75,48 +77,24 @@ const ConsultationChat = () => {
     try {
       const aiResponse = await sendMessageToAI(input);
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          message: aiResponse.main_response,
-          isAi: true,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ]);
+      if (aiResponse) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            message: aiResponse.main_response,
+            isAi: true,
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ]);
 
-      if (aiResponse.suggestions) {
-        setSuggestions(
-          aiResponse.suggestions.map((suggestion, index) => ({
-            id: index + 1,
-            description: suggestion,
-            visible: true,
-          }))
-        );
+        setCurrentState(aiResponse.current_state);
+        setDone(aiResponse.done);
       }
-    } catch (error) {
-      console.error("Error in handleSend:", error);
-      toast.error("Failed to process message");
+    } catch {
+      // Error logging is already handled in sendMessageToAI.
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleAccept = (id: number) => {
-    setSuggestions((prev) =>
-      prev.map((suggestion) =>
-        suggestion.id === id ? { ...suggestion, visible: false } : suggestion
-      )
-    );
-    toast.success("Suggestion accepted!");
-  };
-
-  const handleDecline = (id: number) => {
-    setSuggestions((prev) =>
-      prev.map((suggestion) =>
-        suggestion.id === id ? { ...suggestion, visible: false } : suggestion
-      )
-    );
-    toast.error("Suggestion declined");
   };
 
   return (
@@ -124,7 +102,12 @@ const ConsultationChat = () => {
       <div className="flex-1 flex flex-col p-4">
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4">
           {messages.map((msg, idx) => (
-            <ChatMessage key={idx} {...msg} />
+            <ChatMessage
+              key={idx}
+              message={msg.message}
+              isAi={msg.isAi}
+              timestamp={msg.timestamp}
+            />
           ))}
         </div>
         <div className="mt-4 flex gap-2">
@@ -133,7 +116,7 @@ const ConsultationChat = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             className="flex-1"
-            onKeyPress={(e) => e.key === "Enter" && !loading && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
             disabled={loading}
           />
           <Button onClick={handleSend} disabled={loading}>
@@ -141,26 +124,11 @@ const ConsultationChat = () => {
           </Button>
         </div>
       </div>
-      <div className="w-80 bg-accent p-4 overflow-y-auto scrollbar-hide">
-        <h2 className="text-lg font-semibold mb-4">Suggestions</h2>
-        {suggestions
-          .filter((suggestion) => suggestion.visible)
-          .map((suggestion) => (
-            <SuggestionCard
-              key={suggestion.id}
-              title="Feature Suggestion"
-              description={suggestion.description}
-              onAccept={() => handleAccept(suggestion.id)}
-              onDecline={() => handleDecline(suggestion.id)}
-            />
-          ))}
-      </div>
-
-      <PRDModal
-        open={showPRDModal}
-        onOpenChange={setShowPRDModal}
-        projectInfo={projectInfo}
-      />
+      {done && (
+        <div className="p-4 bg-green-100 text-green-700 text-center">
+          The consultation is complete. 🎉
+        </div>
+      )}
     </div>
   );
 };

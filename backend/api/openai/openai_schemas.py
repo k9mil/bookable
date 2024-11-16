@@ -2,10 +2,18 @@ from pydantic import BaseModel
 from typing import Optional
 
 
+class CurrentState(BaseModel):
+    core_product_purpose: Optional[str] = None
+    key_stakeholders: Optional[str] = None
+    product_description: Optional[str] = None
+
+
 class ChatRequest(BaseModel):
-    message: str
-    temperature: Optional[float] = 0.1
-    max_tokens: Optional[int] = 4096
+    current_state: CurrentState
+    user_message: str
+
 
 class ChatResponse(BaseModel):
-    response: str
+    done: bool
+    current_state: CurrentState
+    main_response: str
