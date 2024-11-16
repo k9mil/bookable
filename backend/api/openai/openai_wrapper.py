@@ -1,6 +1,7 @@
 from openai import OpenAI
 import json
 from typing import List
+from io import BytesIO
 
 class OpenAIWrapper:
     def __init__(self) -> None:
@@ -155,3 +156,11 @@ PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMEN
             return str(chat_completion.choices[0].message.content)
         except Exception as e:
             raise Exception(f"Error generating PRD: {str(e)}")
+
+    def transcribe_audio(self, buffer: BytesIO) -> str:
+        transcription = self.client.audio.transcriptions.create(
+            model="whisper-1",
+            file=buffer,
+        )
+
+        return transcription.text

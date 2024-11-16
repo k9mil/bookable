@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Send, X, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import AudioRecorder from "./AudioRecorder";
 
 interface AIResponse {
   done: boolean;
@@ -139,8 +140,9 @@ const ConsultationChat = () => {
     }
   };
 
-  // Rest of the component remains the same...
-  // (keeping all the handlers and UI code identical to preserve functionality)
+  const handleTranscriptionComplete = (transcription) => {
+    setInput(transcription);
+  };
 
   const handleAccept = (suggestion: Suggestion) => {
     setSuggestions((prev) =>
@@ -177,10 +179,10 @@ const ConsultationChat = () => {
     toast.success(
       "Consultation finished! This is where you'd handle the final requirements."
     );
-    navigate("/prd", { 
-      state: { 
-        requirements: requirements 
-      } 
+    navigate("/prd", {
+      state: {
+        requirements: requirements,
+      },
     });
   };
 
@@ -227,6 +229,9 @@ const ConsultationChat = () => {
             className="flex-1"
             onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
             disabled={loading}
+          />
+          <AudioRecorder
+            onTranscriptionComplete={handleTranscriptionComplete}
           />
           <Button onClick={handleSend} disabled={loading}>
             <Send className="w-4 h-4" />

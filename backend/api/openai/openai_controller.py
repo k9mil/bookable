@@ -1,6 +1,7 @@
 import json
 from typing import Union, List
-from fastapi import HTTPException, APIRouter, Body
+from fastapi import HTTPException, APIRouter, Body, UploadFile, File
+from io import BytesIO
 from api.openai.openai_schemas import ChatResponse, CurrentState, FinalState, ChatRequest, PRDRequest, PRDResponse
 from api.openai.openai_wrapper import OpenAIWrapper
 
@@ -86,3 +87,15 @@ async def generate_prd(request: PRDRequest = Body(...)):
         return PRDResponse(prd=prd_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@openai_router.post("/api/v1/audio")
+async def transcribe_audio_endpoint(file: UploadFile = File(...)):
+    file_content = file.file.read()
+
+    buffer = BytesIO(file_content)
+    buffer.name = "_user_audio_file.mp3"
+
+    open_ai_wrapper = OpenAIWrapper()
+    transcription_result = open_ai_wrapper.transcribe_audio(buffer)
+    
+    return {"openai_transcript_output": transcription_result}
