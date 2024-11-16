@@ -121,7 +121,6 @@ const ConsultationChat = () => {
       const aiResponse = await sendMessageToAI(input);
 
       if (aiResponse) {
-        console.log("Done flag:", aiResponse);
         setMessages((prev) => [
           ...prev,
           {
@@ -311,7 +310,7 @@ const ConsultationChat = () => {
       <FinishModal
         open={finishModalOpen}
         onOpenChange={setFinishModalOpen}
-        requirements={requirements.map(req => req.description)}
+        requirements={requirements}
         currentState={currentState}
       />
     </div>

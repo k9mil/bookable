@@ -92,6 +92,17 @@ async def generate_prd(request: PRDRequest = Body(...)):
         return PRDResponse(prd=prd_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@openai_router.post("/api/v1/prd-to-json", response_model=PRDResponse)
+async def prd_to_json(request: PRDRequest = Body(...)):
+    try:
+        return PRDResponse(
+            requirements=request.requirements,
+            timeline=request.timeline,
+            budget=request.budget
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @openai_router.post("/api/v1/audio")
 async def transcribe_audio_endpoint(file: UploadFile = File(...)):

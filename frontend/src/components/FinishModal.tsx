@@ -10,15 +10,21 @@ import { useNavigate } from "react-router-dom";
 type FinishModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  requirements: string[];
+  requirements: Requirement[];
   currentState: Record<string, unknown>;
 };
 
-export const FinishModal = ({ 
-  open, 
-  onOpenChange, 
-  requirements, 
-  currentState 
+interface Requirement {
+  id: number;
+  description: string;
+  timestamp: string;
+}
+
+export const FinishModal = ({
+  open,
+  onOpenChange,
+  requirements,
+  currentState,
 }: FinishModalProps) => {
   const navigate = useNavigate();
 
@@ -26,7 +32,7 @@ export const FinishModal = ({
     navigate("/prd", {
       state: {
         requirements: requirements,
-        current_state: currentState
+        current_state: currentState,
       },
     });
   };
@@ -45,11 +51,15 @@ export const FinishModal = ({
           <Button onClick={handlePRDNavigation} className="w-full">
             View PRD
           </Button>
-          <Button onClick={handleDashboardNavigation} variant="outline" className="w-full">
+          <Button
+            onClick={handleDashboardNavigation}
+            variant="outline"
+            className="w-full"
+          >
             Go to Dashboard
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-}; 
+};
