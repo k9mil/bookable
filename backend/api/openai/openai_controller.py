@@ -49,6 +49,7 @@ def handle_final_state(request: ChatRequest):
     """
     response = openai_wrapper.suggestion_gathering(
         current_requirements=request.current_requirements if request.current_requirements else [],
+        rejected_requirements=request.rejected_requirements if request.rejected_requirements else [],
         user_message=request.user_message,
     )
     cleaned_response = response.strip()

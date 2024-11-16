@@ -66,12 +66,16 @@ Please provide suggestions in the JSON below format. You MUST provide at least 3
 You must use the specified JSON format, and have each suggestions as a string in the `approved_requirements` key.
 YOUR RESPONSE ONLY SHOULD CONTAIN THE JSON FORMAT BELOW. NOTHING ELSE.
 THE CURRENT_REQUIREMENTS ARE ONLY USER PROVIDED REQUIREMENTS. NEVER ADD ANYTHING THERE YOURSELF.
+NEVER CHANGE THE REJECTED REQUIREMENTS. ALSO, NEVER PROPOSE REQUIREMENTS THAT WERE PREVIOUSLY REJECTED, AS IN, ALREADY IN THE REJECTED LIST. PLEASE.
 
 Response format:
 {
     "current_requirements": [
         [string or null]
-    ]
+    ],
+    "rejected_requirements": [
+        [string or null]
+    ],
     "suggested_requirements": [
         [string],
         [string],
@@ -127,6 +131,7 @@ PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMEN
     def suggestion_gathering(
         self,
         current_requirements: List[str],
+        rejected_requirements: List[str],
         user_message: str,
         temperature: float = 0.2,
         max_tokens: int = 4096,
@@ -137,6 +142,7 @@ PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMEN
                 messages=[
                     {"role": "system", "content": self.prompt_second},
                     {"role": "user", "content": f"Requirements: {json.dumps(current_requirements)}"},
+                    {"role": "user", "content": f"Rejected Requirements: {json.dumps(rejected_requirements)}"},
                     {"role": "user", "content": user_message},
                 ],
                 max_tokens=max_tokens,

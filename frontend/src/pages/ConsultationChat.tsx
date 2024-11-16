@@ -57,6 +57,9 @@ const ConsultationChat = () => {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [requirements, setRequirements] = useState<Requirement[]>([]);
+  const [rejectedRequirements, setRejectedRequirements] = useState<
+    Requirement[]
+  >([]);
 
   const sendMessageToAI = async (userMessage: string) => {
     try {
@@ -65,6 +68,9 @@ const ConsultationChat = () => {
       if (requirements.length > 0) {
         requestBody = {
           current_requirements: requirements.map((req) => req.description),
+          rejected_requirements: rejectedRequirements.map(
+            (req) => req.description
+          ),
           user_message: userMessage,
         };
       } else {
@@ -171,6 +177,20 @@ const ConsultationChat = () => {
         suggestion.id === id ? { ...suggestion, visible: false } : suggestion
       )
     );
+
+    const declinedSuggestion = suggestions.find((s) => s.id === id);
+
+    if (declinedSuggestion) {
+      setRejectedRequirements((prev) => [
+        ...prev,
+        {
+          id: declinedSuggestion.id,
+          description: declinedSuggestion.description,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
+    }
+
     toast.error("Suggestion declined");
   };
 

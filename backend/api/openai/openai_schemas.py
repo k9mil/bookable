@@ -13,6 +13,7 @@ class CurrentState(BaseModel):
 class ChatRequest(BaseModel):
     current_state: Optional[CurrentState] = None
     current_requirements: Optional[List[str]] = None
+    rejected_requirements: Optional[List[str]] = None
     user_message: str
 
 
