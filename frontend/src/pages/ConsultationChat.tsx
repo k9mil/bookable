@@ -12,8 +12,10 @@ interface AIResponse {
   done: boolean;
   current_state?: {
     core_product_purpose: string | null;
-    key_stakeholders: string | null;
-    potential_constraints: string | null;
+    product_description: string | null;
+    users_of_system: string | null;
+    timeline: string | null;
+    budget: string | null;
   };
   main_response: string;
   suggested_requirements?: string[];
@@ -45,8 +47,10 @@ const ConsultationChat = () => {
   const [currentState, setCurrentState] = useState<AIResponse["current_state"]>(
     {
       core_product_purpose: null,
-      key_stakeholders: null,
-      potential_constraints: null,
+      product_description: null,
+      users_of_system: null,
+      timeline: null,
+      budget: null,
     }
   );
   const [done, setDone] = useState(false);

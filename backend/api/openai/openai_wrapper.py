@@ -13,8 +13,10 @@ Input format:
     {
     "current_state": {
         "core_product_purpose": [string or null],
-        "key_stakeholders": [string or null],
-        "product_description": [string or null]
+        "product_description": [string or null],
+        "users_of_system": [string or null],
+        "timeline": [string or null],
+        "budget": [string or null]
     }
 }
 Instructions:
@@ -32,8 +34,10 @@ Response format:
 "done": [true/false],
 "current_state": {
 "core_product_purpose": [string or null],
-"key_stakeholders": [string or null],
-"product_description": [string or null]
+"product_description": [string or null],
+"users_of_system": [string or null],
+"timeline": [string or null],
+"budget": [string or null]
 },
 "main_response": [single high-level question or null if done]
 }"
@@ -45,8 +49,10 @@ Input format:
 {
 "current_state": {
 "core_product_purpose": [string or null],
-"key_stakeholders": [string or null],
-"product_description": [string or null]
+"product_description": [string or null],
+"users_of_system": [string or null],
+"timeline": [string or null],
+"budget": [string or null]
 }
 }
 

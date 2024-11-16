@@ -4,8 +4,10 @@ from typing import Optional, List
 
 class CurrentState(BaseModel):
     core_product_purpose: Optional[str] = None
-    key_stakeholders: Optional[str] = None
     product_description: Optional[str] = None
+    users_of_system: Optional[str] = None
+    timeline: Optional[str] = None
+    budget: Optional[str] = None
 
 
 class ChatRequest(BaseModel):
