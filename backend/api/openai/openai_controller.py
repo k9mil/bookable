@@ -85,7 +85,10 @@ async def generate_prd(request: PRDRequest = Body(...)):
                 detail="Requirements list is required"
             )
             
-        prd_content = openai_wrapper.generate_prd(request.requirements)
+        prd_content = openai_wrapper.generate_prd(
+            request.requirements,
+            request.current_state.model_dump()
+        )
         return PRDResponse(prd=prd_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

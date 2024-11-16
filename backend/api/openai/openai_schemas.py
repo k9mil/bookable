@@ -26,6 +26,7 @@ class FinalState(BaseModel):
 
 class PRDRequest(BaseModel):
     requirements: List[str]
+    current_state: CurrentState
 
 class PRDResponse(BaseModel):
     prd: str

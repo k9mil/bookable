@@ -7,6 +7,7 @@ import { Send, X, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import AudioRecorder from "./AudioRecorder";
+import { FinishModal } from "@/components/FinishModal";
 
 interface AIResponse {
   done: boolean;
@@ -60,6 +61,7 @@ const ConsultationChat = () => {
   const [rejectedRequirements, setRejectedRequirements] = useState<
     Requirement[]
   >([]);
+  const [finishModalOpen, setFinishModalOpen] = useState(false);
 
   const sendMessageToAI = async (userMessage: string) => {
     try {
@@ -119,6 +121,7 @@ const ConsultationChat = () => {
       const aiResponse = await sendMessageToAI(input);
 
       if (aiResponse) {
+        console.log("Done flag:", aiResponse);
         setMessages((prev) => [
           ...prev,
           {
@@ -201,14 +204,7 @@ const ConsultationChat = () => {
   };
 
   const handleFinish = () => {
-    toast.success(
-      "Consultation finished! This is where you'd handle the final requirements."
-    );
-    navigate("/prd", {
-      state: {
-        requirements: requirements,
-      },
-    });
+    setFinishModalOpen(true);
   };
 
   const RequirementCard = ({ requirement }: { requirement: Requirement }) => (
@@ -312,6 +308,12 @@ const ConsultationChat = () => {
           )}
         </div>
       </div>
+      <FinishModal
+  open={finishModalOpen}
+  onOpenChange={setFinishModalOpen}
+  requirements={requirements}
+  currentState={currentState}
+/>
     </div>
   );
 };

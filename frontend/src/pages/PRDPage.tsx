@@ -15,6 +15,7 @@ const PRDPage = () => {
   const [parsedSections, setParsedSections] = useState<PRDSection[]>([]);
   const location = useLocation();
   const requirements = location.state?.requirements;
+  const current_state = location.state?.current_state;
 
   useEffect(() => {
     if (requirements) {
@@ -58,7 +59,8 @@ const PRDPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          requirements: requirements.map(req => req.description)
+          requirements: requirements.map(req => req.description),
+          current_state: current_state
         }),
       });
 

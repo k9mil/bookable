@@ -89,7 +89,7 @@ Response format:
 
 {requirements}
 
-Format the PRD, keeping each section brief and focused only on the provided requirements:
+Format the PRD with markdown, keeping each section brief and focused only on the provided requirements:
 
 1. Overview (2-3 sentences)
 2. Requirements Breakdown
@@ -173,8 +173,8 @@ THIS IS A JSON FORMAT.
         except Exception as e:
             raise Exception(f"Error calling OpenAI API: {str(e)}")
 
-    def generate_prd(self, requirements: List[str]) -> str:
-        formatted_requirements = "\n".join([f"- {req}" for req in requirements])
+    def generate_prd(self, requirements: List[str], current_state: dict) -> str:
+        formatted_requirements = "\n".join([f"- {req}" for req in requirements]).join(f"\nCurrent State: {json.dumps(current_state)}")
         prompt = self.prd_prompt.format(requirements=formatted_requirements)
         
         try:
