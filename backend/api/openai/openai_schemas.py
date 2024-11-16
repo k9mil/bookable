@@ -22,3 +22,9 @@ class ChatResponse(BaseModel):
 class FinalState(BaseModel):
     suggested_requirements: List[str]
     main_response: str
+
+class PRDRequest(BaseModel):
+    requirements: List[str]
+
+class PRDResponse(BaseModel):
+    prd: str

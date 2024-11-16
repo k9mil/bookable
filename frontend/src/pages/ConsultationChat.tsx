@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, X, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface AIResponse {
   done: boolean;
@@ -30,6 +31,7 @@ interface Suggestion {
 }
 
 const ConsultationChat = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     {
       message:
@@ -175,6 +177,11 @@ const ConsultationChat = () => {
     toast.success(
       "Consultation finished! This is where you'd handle the final requirements."
     );
+    navigate("/prd", { 
+      state: { 
+        requirements: requirements 
+      } 
+    });
   };
 
   const RequirementCard = ({ requirement }: { requirement: Requirement }) => (

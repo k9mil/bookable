@@ -73,6 +73,27 @@ Response format:
     "main_response": [single high-level question or null if done]
 }
 """
+        self.prd_prompt = """Create a focused Product Requirements Document (PRD) based strictly on these requirements:
+
+{requirements}
+
+Format the PRD with these sections using markdown, keeping each section brief and focused only on the provided requirements:
+
+1. Overview (2-3 sentences)
+2. Requirements Breakdown
+   - Functional Requirements
+   - Technical Requirements
+3. Success Criteria
+4. Timeline
+
+Important:
+- Only include information directly related to the provided requirements
+- Keep the document concise and specific
+- Do not add assumptions or requirements that weren't explicitly listed
+- Focus on clarity over comprehensiveness
+
+PLEASE DO NOT MAKE UP NEW REQUIREMENTS AND KEEP IT STRICLTY TO THE GIVEN ARGUMENTS
+"""
 
     def prompt_chat(
         self,
@@ -117,3 +138,20 @@ Response format:
             return str(chat_completion.choices[0].message.content)
         except Exception as e:
             raise Exception(f"Error calling OpenAI API: {str(e)}")
+
+    def generate_prd(self, requirements: List[str]) -> str:
+        formatted_requirements = "\n".join([f"- {req}" for req in requirements])
+        prompt = self.prd_prompt.format(requirements=formatted_requirements)
+        
+        try:
+            chat_completion = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": prompt},
+                ],
+                temperature=0.5,
+                max_tokens=1000   # Limited length
+            )
+            return str(chat_completion.choices[0].message.content)
+        except Exception as e:
+            raise Exception(f"Error generating PRD: {str(e)}")

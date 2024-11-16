@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   ArrowRight,
   Building,
@@ -16,10 +16,18 @@ const Landing = () => {
       <div className="container mx-auto px-4 py-16">
         <nav className="flex justify-between items-center mb-16">
           <h1 className="text-2xl font-bold text-white">Bookable</h1>
-          <Button onClick={() => navigate("/consult")} variant="outline">
-            Get Started
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex space-x-4">
+            <Button onClick={() => navigate("/consult")} variant="outline">
+              Get Started
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <Link
+              to="/prd"
+              className="text-sm font-medium text-white hover:text-white/80"
+            >
+              View PRD
+            </Link>
+          </div>
         </nav>
 
         <div className="max-w-3xl mx-auto text-center mb-16">

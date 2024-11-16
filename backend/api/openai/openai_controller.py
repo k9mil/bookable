@@ -1,7 +1,7 @@
 import json
-from typing import Union
-from fastapi import HTTPException, APIRouter
-from api.openai.openai_schemas import ChatResponse, CurrentState, FinalState, ChatRequest
+from typing import Union, List
+from fastapi import HTTPException, APIRouter, Body
+from api.openai.openai_schemas import ChatResponse, CurrentState, FinalState, ChatRequest, PRDRequest, PRDResponse
 from api.openai.openai_wrapper import OpenAIWrapper
 
 
@@ -70,5 +70,19 @@ async def chat(request: ChatRequest) -> Union[ChatResponse, FinalState]:
     try:
         if not done_flag: return handle_initial_state(request)
         else: return handle_final_state(request)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@openai_router.post("/api/v1/generate-prd", response_model=PRDResponse)
+async def generate_prd(request: PRDRequest = Body(...)):
+    try:
+        if not request.requirements:
+            raise HTTPException(
+                status_code=400, 
+                detail="Requirements list is required"
+            )
+            
+        prd_content = openai_wrapper.generate_prd(request.requirements)
+        return PRDResponse(prd=prd_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
