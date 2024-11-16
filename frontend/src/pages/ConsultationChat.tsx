@@ -309,11 +309,11 @@ const ConsultationChat = () => {
         </div>
       </div>
       <FinishModal
-  open={finishModalOpen}
-  onOpenChange={setFinishModalOpen}
-  requirements={requirements}
-  currentState={currentState}
-/>
+        open={finishModalOpen}
+        onOpenChange={setFinishModalOpen}
+        requirements={requirements.map(req => req.description)}
+        currentState={currentState}
+      />
     </div>
   );
 };
