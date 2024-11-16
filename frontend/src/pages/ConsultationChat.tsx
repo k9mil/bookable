@@ -67,6 +67,7 @@ const ConsultationChat = () => {
 
       if (requirements.length > 0) {
         requestBody = {
+          current_state: currentState,
           current_requirements: requirements.map((req) => req.description),
           rejected_requirements: rejectedRequirements.map(
             (req) => req.description

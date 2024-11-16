@@ -9,13 +9,11 @@ class CurrentState(BaseModel):
     timeline: Optional[str] = None
     budget: Optional[str] = None
 
-
 class ChatRequest(BaseModel):
     current_state: Optional[CurrentState] = None
     current_requirements: Optional[List[str]] = None
     rejected_requirements: Optional[List[str]] = None
     user_message: str
-
 
 class ChatResponse(BaseModel):
     done: bool

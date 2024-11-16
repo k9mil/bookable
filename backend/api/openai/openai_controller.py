@@ -48,6 +48,7 @@ def handle_final_state(request: ChatRequest):
     Handles the final state where we gather the suggested requirements.
     """
     response = openai_wrapper.suggestion_gathering(
+        current_state=request.current_state.model_dump(),
         current_requirements=request.current_requirements if request.current_requirements else [],
         rejected_requirements=request.rejected_requirements if request.rejected_requirements else [],
         user_message=request.user_message,
