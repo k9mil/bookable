@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Building, ChartBarIncreasing, Handshake, Rocket } from "lucide-react";
+import {
+  ArrowRight,
+  Building,
+  ChartBarIncreasing,
+  Handshake,
+  Rocket,
+} from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -9,7 +15,7 @@ const Landing = () => {
     <div className="min-h-screen bg-muted">
       <div className="container mx-auto px-4 py-16">
         <nav className="flex justify-between items-center mb-16">
-          <h1 className="text-2xl font-bold text-white">chatwise</h1>
+          <h1 className="text-2xl font-bold text-white">Bookable</h1>
           <Button onClick={() => navigate("/consult")} variant="outline">
             Get Started
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -39,7 +45,8 @@ const Landing = () => {
             {
               icon: Rocket,
               title: "Launch Fast",
-              description: "Get your product requirements in minutes, not weeks",
+              description:
+                "Get your product requirements in minutes, not weeks",
             },
             {
               icon: Building,
@@ -49,7 +56,8 @@ const Landing = () => {
             {
               icon: Handshake,
               title: "Expert Guidance",
-              description: "AI-powered consultation based on industry best practices",
+              description:
+                "AI-powered consultation based on industry best practices",
             },
             {
               icon: ChartBarIncreasing,
@@ -62,7 +70,9 @@ const Landing = () => {
               className="p-4 rounded-lg glass-morphism hover:scale-105 transition-transform"
             >
               <feature.icon className="h-6 w-6 text-white mb-3" />
-              <h3 className="text-base font-semibold text-white mb-2">{feature.title}</h3>
+              <h3 className="text-base font-semibold text-white mb-2">
+                {feature.title}
+              </h3>
               <p className="text-gray-300 text-sm">{feature.description}</p>
             </div>
           ))}

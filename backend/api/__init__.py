@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.sample.sample_controller import sample_router
+from api.openai.openai_controller import openai_router
 
 from api.config import DevelopmentConfig
 
@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(sample_router, tags=["sample_router"])
+    app.include_router(openai_router, tags=["sample_router"])
 
     app.state.config = config
 

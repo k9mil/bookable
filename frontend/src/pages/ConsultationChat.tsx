@@ -8,45 +8,61 @@ import { toast } from "sonner";
 import { PRDModal } from "@/components/PRDModal";
 import { Question, ProjectInfo } from "@/types/consultation";
 
-const questions: Question[] = [
-  { id: 1, text: "What problem does your idea solve?", key: "problemStatement" },
-  { id: 2, text: "Who is your target audience?", key: "targetAudience" },
-  { id: 3, text: "What are the key features you envision?", key: "keyFeatures" },
-  { id: 4, text: "How will you measure success?", key: "successMetrics" },
-  { id: 5, text: "What's your expected timeline?", key: "timeline" },
-];
+interface AIResponse {
+  main_response: string;
+  suggestions?: string[];
+}
 
 const ConsultationChat = () => {
   const [messages, setMessages] = useState([
     {
-      message: "Hi! I'm your AI consultant. Let's discuss your business idea. What problem does your idea solve?",
+      message:
+        "Hello! I'm here to help turn your product idea into reality. Whether you have a rough concept or a detailed vision, I'll guide you through the process of creating a market-ready product. Let's start by hearing about your idea.",
       isAi: true,
       timestamp: new Date().toLocaleTimeString(),
     },
   ]);
   const [input, setInput] = useState("");
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [projectInfo, setProjectInfo] = useState<Partial<ProjectInfo>>({});
   const [prdGenerated, setPrdGenerated] = useState(false);
   const [showPRDModal, setShowPRDModal] = useState(false);
-  const [suggestions, setSuggestions] = useState([
-    {
-      id: 1,
-      title: "Mobile App Development",
-      description: "Based on your requirements, a mobile app would be ideal for reaching your target audience.",
-      visible: true,
-    },
-    {
-      id: 2,
-      title: "Marketing Strategy",
-      description: "Consider implementing a social media marketing campaign to increase visibility.",
-      visible: true,
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<
+    Array<{
+      id: number;
+      description: string;
+      visible: boolean;
+    }>
+  >([]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const sendMessageToAI = async (userMessage: string) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/v1/model", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userMessage }),
+      });
 
+      if (!response.ok) {
+        throw new Error("Failed to get AI response");
+      }
+
+      const data = await response.json();
+      const parsedResponse: AIResponse = JSON.parse(data.response);
+      return parsedResponse;
+    } catch (error) {
+      console.error("Error getting AI response:", error);
+      toast.error("Failed to get AI response");
+      throw error;
+    }
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || loading) return;
+
+    setLoading(true);
     const userMessage = {
       message: input,
       isAi: false,
@@ -56,47 +72,38 @@ const ConsultationChat = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    if (currentQuestionIndex < questions.length) {
-      const currentQuestion = questions[currentQuestionIndex];
-      setProjectInfo((prev) => ({
-        ...prev,
-        [currentQuestion.key]: input,
-      }));
+    try {
+      const aiResponse = await sendMessageToAI(input);
 
-      if (currentQuestionIndex < questions.length - 1) {
-        const nextQuestion = questions[currentQuestionIndex + 1];
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: nextQuestion.text,
-              isAi: true,
-              timestamp: new Date().toLocaleTimeString(),
-            },
-          ]);
-        }, 1000);
-        setCurrentQuestionIndex((prev) => prev + 1);
-      } else {
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            {
-              message: "Thank you for providing all the information. I've generated a PRD based on your responses.",
-              isAi: true,
-              timestamp: new Date().toLocaleTimeString(),
-            },
-          ]);
-          setPrdGenerated(true);
-          setShowPRDModal(true);
-          toast.success("PRD has been generated!");
-        }, 1000);
+      setMessages((prev) => [
+        ...prev,
+        {
+          message: aiResponse.main_response,
+          isAi: true,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
+
+      if (aiResponse.suggestions) {
+        setSuggestions(
+          aiResponse.suggestions.map((suggestion, index) => ({
+            id: index + 1,
+            description: suggestion,
+            visible: true,
+          }))
+        );
       }
+    } catch (error) {
+      console.error("Error in handleSend:", error);
+      toast.error("Failed to process message");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAccept = (id: number) => {
-    setSuggestions(prev =>
-      prev.map(suggestion =>
+    setSuggestions((prev) =>
+      prev.map((suggestion) =>
         suggestion.id === id ? { ...suggestion, visible: false } : suggestion
       )
     );
@@ -104,8 +111,8 @@ const ConsultationChat = () => {
   };
 
   const handleDecline = (id: number) => {
-    setSuggestions(prev =>
-      prev.map(suggestion =>
+    setSuggestions((prev) =>
+      prev.map((suggestion) =>
         suggestion.id === id ? { ...suggestion, visible: false } : suggestion
       )
     );
@@ -126,9 +133,10 @@ const ConsultationChat = () => {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
             className="flex-1"
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && !loading && handleSend()}
+            disabled={loading}
           />
-          <Button onClick={handleSend}>
+          <Button onClick={handleSend} disabled={loading}>
             <Send className="w-4 h-4" />
           </Button>
         </div>
@@ -136,11 +144,11 @@ const ConsultationChat = () => {
       <div className="w-80 bg-accent p-4 overflow-y-auto scrollbar-hide">
         <h2 className="text-lg font-semibold mb-4">Suggestions</h2>
         {suggestions
-          .filter(suggestion => suggestion.visible)
+          .filter((suggestion) => suggestion.visible)
           .map((suggestion) => (
             <SuggestionCard
               key={suggestion.id}
-              title={suggestion.title}
+              title="Feature Suggestion"
               description={suggestion.description}
               onAccept={() => handleAccept(suggestion.id)}
               onDecline={() => handleDecline(suggestion.id)}
