@@ -31,8 +31,7 @@ def handle_initial_state(request: ChatRequest):
         print(f"JSON Decode Error: {e}")
         raise HTTPException(status_code=500, detail="Invalid JSON response format")
 
-    # If the response indicates done, set done_flag to True
-    if parsed_response["done"]:
+    if parsed_response["done"] == True:
         global done_flag
         done_flag = True
         return handle_final_state(request)
@@ -48,7 +47,7 @@ def handle_final_state(request: ChatRequest):
     Handles the final state where we gather the suggested requirements.
     """
     response = openai_wrapper.suggestion_gathering(
-        current_requirements=request.current_requirements,
+        current_requirements=request.current_requirements if request.current_requirements else [],
         user_message=request.user_message,
     )
     cleaned_response = response.strip()

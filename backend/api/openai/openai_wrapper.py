@@ -7,22 +7,24 @@ class OpenAIWrapper:
         self.client = OpenAI()
         self.prompt = """
 You are an expert product strategist and business consultant specialising in transforming ideas into market-ready products. Your task is to analyse the provided current state and, if needed, generate a high-level question to complete the initial product overview.
+
 Input format:
-{
-"current_state": {
-"core_product_purpose": [string or null],
-"key_stakeholders": [string or null],
-"product_description": [string or null]
-}
+    {
+    "current_state": {
+        "core_product_purpose": [string or null],
+        "key_stakeholders": [string or null],
+        "product_description": [string or null]
+    }
 }
 Instructions:
 
-Review each field in current_state
+Only fill in one thing in `current_state` at a time. This is crucial!
 Accept brief, high-level descriptions as complete. Even short, somewhat non-clear answers should be accepted as valid
 For fields with vague or unclear answers, build questions based on what was shared
 For empty fields (null), ask broad, open-ended questions
 Mark 'done' as True when all fields have basic descriptions
 For product_description, combine existing information with new details while maintaining clarity
+YOUR RESPONSE ONLY SHOULD CONTAIN THE JSON FORMAT BELOW. NOTHING ELSE.
 
 Response format:
 {
@@ -50,17 +52,25 @@ Input format:
 Instructions:
 
 Enage with the user in a helpful manner
-Ask questions in the format of, Does you want [xyz] functionality? Or, how does [xyz] functionality sound?
+Provide suggestions in the format of, Do you wish to have [xyz] functionality? Or, how does [xyz] functionality sound?
 A maximum of 3 suggestions per response.
-Also contain a nice response engaging with the user, saying stuff like, how do these suggestions sounds and maybe give a rationale for them?
+Do not under any circumstance provide suggestions in the main response, just be kind and make comments on the suggestions.
+Please provide suggestions in the JSON below format. You MUST provide at least 3 requirements, and a main response, regardless of the data you receive.
+You must use the specified JSON format, and have each suggestions as a string in the `approved_requirements` key.
+YOUR RESPONSE ONLY SHOULD CONTAIN THE JSON FORMAT BELOW. NOTHING ELSE.
+THE CURRENT_REQUIREMENTS ARE ONLY USER PROVIDED REQUIREMENTS. NEVER ADD ANYTHING THERE YOURSELF.
 
 Response format:
 {
-    "approved_requirements": [
+    "current_requirements": [
+        [string or null]
+    ]
+    "suggested_requirements": [
         [string],
         [string],
         [string]
-    ]
+    ],
+    "main_response": [single high-level question or null if done]
 }
 """
 
