@@ -21,7 +21,7 @@ const App = () => (
           <Route path="/" element={<Landing />} />
           <Route path="/consult" element={<ConsultationChat />} />
           <Route path="/prd" element={<PRDPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/summary" element={<Dashboard />} />
           <Route path="/customers" element={<PRDList />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

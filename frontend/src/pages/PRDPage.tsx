@@ -30,21 +30,21 @@ const PRDPage = () => {
   }
 
   const handleViewDashboard = () => {
-    localStorage.setItem('prd_content', prdContent);
-    navigate("/dashboard");
+    localStorage.setItem("prd_content", prdContent);
+    navigate("/summary");
   };
 
   const parseMarkdownSections = (markdown: string) => {
     const sections: PRDSection[] = [];
-    const lines = markdown.split('\n');
-    let currentSection: PRDSection = { title: '', content: [] };
+    const lines = markdown.split("\n");
+    let currentSection: PRDSection = { title: "", content: [] };
 
-    lines.forEach(line => {
-      if (line.startsWith('#')) {
+    lines.forEach((line) => {
+      if (line.startsWith("#")) {
         if (currentSection.title) {
           sections.push({ ...currentSection });
         }
-        currentSection = { title: line.replace(/#/g, '').trim(), content: [] };
+        currentSection = { title: line.replace(/#/g, "").trim(), content: [] };
       } else if (line.trim() && currentSection.title) {
         currentSection.content.push(line.trim());
       }
@@ -60,16 +60,19 @@ const PRDPage = () => {
   const fetchPRD = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/v1/generate-prd", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          requirements: requirements.map(req => req.description),
-          current_state: current_state
-        }),
-      });
+      const response = await fetch(
+        "http://127.0.0.1:5000/api/v1/generate-prd",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requirements: requirements.map((req) => req.description),
+            current_state: current_state,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to generate PRD");
@@ -93,7 +96,7 @@ const PRDPage = () => {
             <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
               Product Requirements Document
             </CardTitle>
-            <Button 
+            <Button
               onClick={handleViewDashboard}
               disabled={!prdContent || loading}
               className="ml-4"
@@ -121,11 +124,16 @@ const PRDPage = () => {
                       </h2>
                       <div className="space-y-3">
                         {section.content.map((content, idx) => (
-                          <p key={idx} className="text-zinc-400 leading-relaxed">
-                            {content.startsWith('-') ? (
+                          <p
+                            key={idx}
+                            className="text-zinc-400 leading-relaxed"
+                          >
+                            {content.startsWith("-") ? (
                               <span className="flex items-start">
-                                <span className="text-white mr-3 mt-1.5">•</span>
-                                <span>{content.replace('-', '').trim()}</span>
+                                <span className="text-white mr-3 mt-1.5">
+                                  •
+                                </span>
+                                <span>{content.replace("-", "").trim()}</span>
                               </span>
                             ) : (
                               content

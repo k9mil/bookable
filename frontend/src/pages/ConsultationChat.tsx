@@ -213,11 +213,11 @@ const ConsultationChat = () => {
     try {
       setLoading(true);
       await fetchPRD();
-      navigate("/dashboard", {
+      navigate("/summary", {
         state: {
           requirements: requirements,
-          current_state: currentState
-        }
+          current_state: currentState,
+        },
       });
     } catch (error) {
       console.error("Error during finish:", error);
@@ -230,16 +230,19 @@ const ConsultationChat = () => {
   const fetchPRD = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/v1/generate-prd", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          requirements: requirements.map(req => req.description),
-          current_state: currentState
-        }),
-      });
+      const response = await fetch(
+        "http://127.0.0.1:5000/api/v1/generate-prd",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requirements: requirements.map((req) => req.description),
+            current_state: currentState,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to generate PRD");
@@ -247,8 +250,8 @@ const ConsultationChat = () => {
 
       const data = await response.json();
       setPrdContent(data.prd);
-      localStorage.setItem('prd_content', data.prd);
-      
+      localStorage.setItem("prd_content", data.prd);
+
       setParsedSections(parseMarkdownSections(data.prd));
     } catch (error) {
       console.error("Error generating PRD:", error);
@@ -259,15 +262,15 @@ const ConsultationChat = () => {
 
   const parseMarkdownSections = (markdown: string) => {
     const sections: PRDSection[] = [];
-    const lines = markdown.split('\n');
-    let currentSection: PRDSection = { title: '', content: [] };
+    const lines = markdown.split("\n");
+    let currentSection: PRDSection = { title: "", content: [] };
 
-    lines.forEach(line => {
-      if (line.startsWith('#')) {
+    lines.forEach((line) => {
+      if (line.startsWith("#")) {
         if (currentSection.title) {
           sections.push({ ...currentSection });
         }
-        currentSection = { title: line.replace(/#/g, '').trim(), content: [] };
+        currentSection = { title: line.replace(/#/g, "").trim(), content: [] };
       } else if (line.trim() && currentSection.title) {
         currentSection.content.push(line.trim());
       }
