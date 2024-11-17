@@ -155,8 +155,9 @@ const ConsultationChat = () => {
         setDone(aiResponse.done);
 
         // Check if the response contains "intended users" and add photographer requirements directly
-        if (aiResponse.main_response.toLowerCase().includes("intended users")) {
+        if (aiResponse.main_response.toLowerCase().includes("users")) {
           setRequirements((prev) => [...prev, ...photographerRequirements]);
+          console.log(requirements);
         }
 
         // Handle any additional suggestions from the AI
