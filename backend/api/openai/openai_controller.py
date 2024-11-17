@@ -99,11 +99,7 @@ async def generate_prd(request: PRDRequest = Body(...)):
 async def prd_to_json(request: PRDResponse = Body(...)):
     try:
         prd_json = openai_wrapper.prd_to_summary(request.prd)
-        
-        # Debugging: Print or log the raw response
-        print(f"Raw prd_to_summary response: {prd_json}")
 
-        # Remove any backticks from the response
         prd_json = prd_json.strip('`')
         prd_json = prd_json.replace("json", "")
         prd_json = prd_json.replace("null", "0")
@@ -113,7 +109,6 @@ async def prd_to_json(request: PRDResponse = Body(...)):
 
         parsed_response = json.loads(prd_json)
         
-        # Optionally, add more checks to ensure parsed_response contains expected keys
         if "requirements" not in parsed_response or "milestones" not in parsed_response or "budget" not in parsed_response:
             raise HTTPException(status_code=500, detail="Invalid JSON structure")
 

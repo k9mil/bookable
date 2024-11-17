@@ -136,7 +136,7 @@ THIS IS A JSON FORMAT.
         self,
         current_state: dict,
         user_message: str,
-        temperature: float = 0.2,
+        temperature: float = 0,
         max_tokens: int = 4096,
     ) -> str:
         try:
@@ -160,7 +160,7 @@ THIS IS A JSON FORMAT.
         current_requirements: List[str],
         rejected_requirements: List[str],
         user_message: str,
-        temperature: float = 0.2,
+        temperature: float = 0,
         max_tokens: int = 4096,
     ) -> str:
         try:
@@ -183,6 +183,8 @@ THIS IS A JSON FORMAT.
     def generate_prd(self, requirements: List[str], current_state: dict) -> str:
         formatted_requirements = "\n".join([f"- {req}" for req in requirements]).join(f"\nCurrent State: {json.dumps(current_state)}")
         prompt = self.prd_prompt.format(requirements=formatted_requirements)
+
+        print(prompt)
         
         try:
             chat_completion = self.client.chat.completions.create(
@@ -190,7 +192,7 @@ THIS IS A JSON FORMAT.
                 messages=[
                     {"role": "system", "content": prompt},
                 ],
-                temperature=0.5,
+                temperature=0,
                 max_tokens=1000   # Limited length
             )
             return str(chat_completion.choices[0].message.content)
@@ -205,7 +207,7 @@ THIS IS A JSON FORMAT.
                     {"role": "system", "content": self.prd_to_json_prompt},
                     {"role": "user", "content": prd}
                 ],
-                temperature=0.5,
+                temperature=0,
                 max_tokens=1000
             )
             return str(chat_completion.choices[0].message.content)
