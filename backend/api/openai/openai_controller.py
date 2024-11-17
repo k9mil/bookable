@@ -2,8 +2,9 @@ import json
 from typing import Union, List
 from fastapi import HTTPException, APIRouter, Body, UploadFile, File
 from io import BytesIO
-from api.openai.openai_schemas import ChatResponse, CurrentState, FinalState, ChatRequest, PRDRequest, PRDResponse
+from api.openai.openai_schemas import ChatResponse, CurrentState, DashboardResponse, FinalState, ChatRequest, PRDRequest, PRDResponse
 from api.openai.openai_wrapper import OpenAIWrapper
+from fastapi.responses import JSONResponse
 
 
 openai_router = APIRouter()
@@ -93,14 +94,36 @@ async def generate_prd(request: PRDRequest = Body(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@openai_router.post("/api/v1/prd-to-json", response_model=PRDResponse)
-async def prd_to_json(request: PRDRequest = Body(...)):
+@openai_router.post("/api/v1/prd-to-json", response_model=DashboardResponse)
+
+async def prd_to_json(request: PRDResponse = Body(...)):
     try:
-        return PRDResponse(
-            requirements=request.requirements,
-            timeline=request.timeline,
-            budget=request.budget
+        prd_json = openai_wrapper.prd_to_summary(request.prd)
+        
+        # Debugging: Print or log the raw response
+        print(f"Raw prd_to_summary response: {prd_json}")
+
+        # Remove any backticks from the response
+        prd_json = prd_json.strip('`')
+        prd_json = prd_json.replace("json", "")
+        prd_json = prd_json.replace("null", "0")
+
+        if not prd_json:
+            raise HTTPException(status_code=500, detail="Empty response from prd_to_summary")
+
+        parsed_response = json.loads(prd_json)
+        
+        # Optionally, add more checks to ensure parsed_response contains expected keys
+        if "requirements" not in parsed_response or "milestones" not in parsed_response or "budget" not in parsed_response:
+            raise HTTPException(status_code=500, detail="Invalid JSON structure")
+
+        return DashboardResponse(
+            requirements=parsed_response["requirements"],
+            milestones=parsed_response["milestones"],
+            budget=parsed_response["budget"]
         )
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail=f"JSON Decode Error: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -115,3 +138,4 @@ async def transcribe_audio_endpoint(file: UploadFile = File(...)):
     transcription_result = open_ai_wrapper.transcribe_audio(buffer)
     
     return {"openai_transcript_output": transcription_result}
+

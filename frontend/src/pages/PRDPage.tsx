@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation, Navigate, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface PRDSection {
   title: string;
@@ -13,6 +14,7 @@ const PRDPage = () => {
   const [prdContent, setPrdContent] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [parsedSections, setParsedSections] = useState<PRDSection[]>([]);
+  const navigate = useNavigate();
   const location = useLocation();
   const requirements = location.state?.requirements;
   const current_state = location.state?.current_state;
@@ -26,6 +28,11 @@ const PRDPage = () => {
   if (!requirements) {
     return <Navigate to="/consult" replace />;
   }
+
+  const handleViewDashboard = () => {
+    localStorage.setItem('prd_content', prdContent);
+    navigate("/dashboard");
+  };
 
   const parseMarkdownSections = (markdown: string) => {
     const sections: PRDSection[] = [];
@@ -82,10 +89,17 @@ const PRDPage = () => {
     <div className="min-h-screen bg-black text-white font-inter">
       <div className="container mx-auto py-12 px-4 max-w-5xl">
         <Card className="bg-zinc-900 border-zinc-800 shadow-2xl">
-          <CardHeader className="border-b border-zinc-800">
+          <CardHeader className="border-b border-zinc-800 flex flex-row justify-between items-center">
             <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
               Product Requirements Document
             </CardTitle>
+            <Button 
+              onClick={handleViewDashboard}
+              disabled={!prdContent || loading}
+              className="ml-4"
+            >
+              View Dashboard
+            </Button>
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[700px]">

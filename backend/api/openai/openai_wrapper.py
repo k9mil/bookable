@@ -114,16 +114,23 @@ THIS IS A JSON FORMAT.
 
 {
 	"requirements": [
-		"requirement1",
-		"requirement2",
+        "requirement 1: 
+        {
+		    "title": requirement title 1,
+      	    "description": "requirement description 1"
+        },
+        {
+		    "title": requirement title 2,
+      	    "description": "requirement description 2"
+        }
         ...
 	],
-	"timeline": [
-		"project_kickoff": "date,
-	],
-	"budget": budget,
+	"milestones": { "date": "date string", title: “string”, completed: boolean }
+	"budget": int
 }
 """
+
+
 
     def prompt_chat(
         self,
@@ -212,3 +219,16 @@ THIS IS A JSON FORMAT.
         )
 
         return transcription.text
+    
+    def prd_to_dashboard(self, prd: str) -> str:
+        try:
+            chat_completion = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": self.prd_to_dashboard_prompt},
+                    {"role": "user", "content": prd}
+                ],
+            )
+            return str(chat_completion.choices[0].message.content)
+        except Exception as e:
+            raise Exception(f"Error generating PRD to Dashboard: {str(e)}")

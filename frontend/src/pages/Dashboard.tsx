@@ -3,10 +3,54 @@ import BudgetCard from "@/components/BudgetCard";
 import TimelineCard from "@/components/TimelineCard";
 import ContactCard from "@/components/ContactCard";
 import RequirementsList from "@/components/RequirementsList";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Dashboard = () => {
+  const [requirements, setRequirements] = useState([]);
+  const [milestones, setMilestones] = useState([]);
+  const [budget, setBudget] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const prdContent = localStorage.getItem('prd_content');
+    if (!prdContent) {
+      navigate('/consult', { replace: true });
+      return;
+    }
+
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/v1/prd-to-json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prd: prdContent
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+
+        const data = await response.json();
+        setRequirements(data.requirements);
+        setMilestones(data.milestones);
+        setBudget(data.budget);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        toast.error("Failed to load dashboard data");
+      }
+    };
+
+    fetchDashboardData();
+  }, [navigate]);
+
   return (
-    <div className="min-h-screen p-6 md:p-8">
+    <div className="min-h-screen p-6 md:p-8 bg-muted">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex flex-col gap-4">
           <StatusBadge />
@@ -17,10 +61,10 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <RequirementsList />
+          <RequirementsList content={requirements}/>
           <div className="space-y-6">
-            <TimelineCard />
-            <BudgetCard />
+            <TimelineCard content={milestones}/>
+            <BudgetCard content={budget}/>
           </div>
         </div>
 

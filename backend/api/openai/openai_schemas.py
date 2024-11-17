@@ -30,3 +30,8 @@ class PRDRequest(BaseModel):
 
 class PRDResponse(BaseModel):
     prd: str
+
+class DashboardResponse(BaseModel):
+    requirements: List[dict] = []
+    milestones: List[dict] = []
+    budget: int = 0

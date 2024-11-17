@@ -12,6 +12,7 @@ type FinishModalProps = {
   onOpenChange: (open: boolean) => void;
   requirements: Requirement[];
   currentState: Record<string, unknown>;
+  prdContent?: string;
 };
 
 interface Requirement {
@@ -25,6 +26,7 @@ export const FinishModal = ({
   onOpenChange,
   requirements,
   currentState,
+  prdContent,
 }: FinishModalProps) => {
   const navigate = useNavigate();
 
@@ -38,7 +40,12 @@ export const FinishModal = ({
   };
 
   const handleDashboardNavigation = () => {
-    navigate("/dashboard");
+    if (prdContent) {
+      localStorage.setItem('prd_content', prdContent);
+      navigate("/dashboard");
+    } else {
+      handlePRDNavigation();
+    }
   };
 
   return (
