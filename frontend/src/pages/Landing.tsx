@@ -52,7 +52,7 @@ const Index = () => {
                 </span>
               </h1>
               <p className="text-lg mb-8 text-gray-300 max-w-xl font-light leading-relaxed mx-auto lg:mx-0">
-                Get an expert AI consultation to transform your customers rough
+                Get an expert AI consultant to transform your customers rough
                 business idea into a comprehensive product requirements
                 document. Fast, accurate, and tailored to your customers needs.
               </p>
