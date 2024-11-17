@@ -4,7 +4,7 @@ export interface PRD {
   description: string;
   author: string;
   date: string;
-  status: "Draft" | "In Review" | "Approved" | "Implemented" | "In Progress";
+  status: "View Summary";
   version: string;
   keyFeatures: string[];
   timeline: {
@@ -23,7 +23,7 @@ export const samplePRDs: PRD[] = [
       "A sustainable e-commerce platform that connects eco-conscious consumers with verified sustainable product vendors.",
     author: "Sarah Chen",
     date: "2024-02-15",
-    status: "In Progress",
+    status: "View Summary",
     version: "1.0 - Draft",
     keyFeatures: [
       "Vendor sustainability verification system",
@@ -46,7 +46,7 @@ export const samplePRDs: PRD[] = [
       "A comprehensive patient management system with integrated telehealth capabilities.",
     author: "Michael Rodriguez",
     date: "2024-02-14",
-    status: "In Review",
+    status: "View Summary",
     version: "2.1 - Beta",
     keyFeatures: [
       "Virtual consultations",
@@ -69,7 +69,7 @@ export const samplePRDs: PRD[] = [
       "An adaptive learning platform that personalizes education using artificial intelligence.",
     author: "Emma Watson",
     date: "2024-02-13",
-    status: "Approved",
+    status: "View Summary",
     version: "3.0",
     keyFeatures: [
       "Personalized learning paths",
@@ -92,7 +92,7 @@ export const samplePRDs: PRD[] = [
       "An integrated platform for managing urban infrastructure and services using IoT sensors.",
     author: "David Park",
     date: "2024-02-12",
-    status: "Draft",
+    status: "View Summary",
     version: "0.5 - Alpha",
     keyFeatures: [
       "Real-time traffic monitoring",

@@ -36,7 +36,7 @@ const PRDCard = ({ prd }: PRDCardProps) => {
             </p>
           </div>
           <span className="px-3 py-1 bg-[#e8e9df]/20 text-[#e8e9df] rounded-full text-sm font-light hover:bg-[#e8e9df]/30 cursor-pointer transition-colors duration-200">
-            View Project Summary
+            View Summary
           </span>
         </div>
 

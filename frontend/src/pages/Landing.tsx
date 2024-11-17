@@ -78,7 +78,7 @@ const Index = () => {
                     </p>
                   </div>
                   <span className="px-3 py-1 bg-[#e8e9df]/20 text-[#e8e9df] rounded-full text-sm font-light">
-                    In Progress
+                    View Summary
                   </span>
                 </div>
 
