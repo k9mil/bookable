@@ -34,6 +34,11 @@ interface Suggestion {
   visible: boolean;
 }
 
+interface PRDSection {
+  title: string;
+  content: string[];
+}
+
 const ConsultationChat = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
@@ -62,6 +67,8 @@ const ConsultationChat = () => {
     Requirement[]
   >([]);
   const [finishModalOpen, setFinishModalOpen] = useState(false);
+  const [prdContent, setPrdContent] = useState<string>("");
+  const [parsedSections, setParsedSections] = useState<PRDSection[]>([]);
 
   const sendMessageToAI = async (userMessage: string) => {
     try {
@@ -202,8 +209,75 @@ const ConsultationChat = () => {
     toast.info("Requirement removed");
   };
 
-  const handleFinish = () => {
-    setFinishModalOpen(true);
+  const handleFinish = async () => {
+    try {
+      setLoading(true);
+      await fetchPRD();
+      navigate("/dashboard", {
+        state: {
+          requirements: requirements,
+          current_state: currentState
+        }
+      });
+    } catch (error) {
+      console.error("Error during finish:", error);
+      toast.error("Failed to generate PRD. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPRD = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/v1/generate-prd", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          requirements: requirements.map(req => req.description),
+          current_state: currentState
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate PRD");
+      }
+
+      const data = await response.json();
+      setPrdContent(data.prd);
+      localStorage.setItem('prd_content', data.prd);
+      
+      setParsedSections(parseMarkdownSections(data.prd));
+    } catch (error) {
+      console.error("Error generating PRD:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const parseMarkdownSections = (markdown: string) => {
+    const sections: PRDSection[] = [];
+    const lines = markdown.split('\n');
+    let currentSection: PRDSection = { title: '', content: [] };
+
+    lines.forEach(line => {
+      if (line.startsWith('#')) {
+        if (currentSection.title) {
+          sections.push({ ...currentSection });
+        }
+        currentSection = { title: line.replace(/#/g, '').trim(), content: [] };
+      } else if (line.trim() && currentSection.title) {
+        currentSection.content.push(line.trim());
+      }
+    });
+
+    if (currentSection.title) {
+      sections.push(currentSection);
+    }
+
+    return sections;
   };
 
   const RequirementCard = ({ requirement }: { requirement: Requirement }) => (

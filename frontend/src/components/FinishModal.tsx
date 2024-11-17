@@ -42,7 +42,6 @@ export const FinishModal = ({
   const handleDashboardNavigation = () => {
     if (prdContent) {
       localStorage.setItem('prd_content', prdContent);
-      navigate("/dashboard");
     } else {
       handlePRDNavigation();
     }
