@@ -42,7 +42,7 @@ const Dashboard = () => {
         const data = await response.json();
         setRequirements(data.requirements);
         setMilestones(data.milestones);
-        setBudget(data.budget);
+        setBudget(2000);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         toast.error("Failed to load dashboard data");
