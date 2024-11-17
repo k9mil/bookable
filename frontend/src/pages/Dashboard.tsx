@@ -16,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     const prdContent = localStorage.getItem("prd_content");
     if (!prdContent) {
-      navigate("/consult", { replace: true });
+      navigate("/samaltman/chat", { replace: true });
       return;
     }
 

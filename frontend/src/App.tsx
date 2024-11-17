@@ -19,7 +19,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/consult" element={<ConsultationChat />} />
+          <Route path="/samaltman/chat" element={<ConsultationChat />} />
           <Route path="/prd" element={<PRDPage />} />
           <Route path="/summary" element={<Dashboard />} />
           <Route path="/customers" element={<PRDList />} />

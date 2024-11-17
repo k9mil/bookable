@@ -26,7 +26,7 @@ const PRDPage = () => {
   }, [requirements]);
 
   if (!requirements) {
-    return <Navigate to="/consult" replace />;
+    return <Navigate to="/samaltman/chat" replace />;
   }
 
   const handleViewDashboard = () => {
