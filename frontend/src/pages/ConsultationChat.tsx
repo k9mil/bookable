@@ -70,12 +70,16 @@ const ConsultationChat = () => {
   const [prdContent, setPrdContent] = useState<string>("");
   const [parsedSections, setParsedSections] = useState<PRDSection[]>([]);
 
-  const photographerRequirements = [
-    "Would you like a web platform should have the ability to upload picture?",
-    "Would you like a web platform should support viewing the uploaded pictures?",
+  const photographerRequirements: Requirement[] = [
+    "Would you like a web platform to have the ability to upload pictures?",
+    "Would you like a web platform to support viewing the uploaded pictures?",
     "Would you like the web platform to have a donate button, where users can support the photographer?",
-    "Would you like the platform to have contact me form, where users can contact the photographer?",
-  ];
+    "Would you like the platform to have a contact me form, where users can contact the photographer?",
+  ].map((description, index) => ({
+    id: Date.now() + index,
+    description,
+    timestamp: new Date().toLocaleTimeString(),
+  }));
 
   const sendMessageToAI = async (userMessage: string) => {
     try {
@@ -152,16 +156,7 @@ const ConsultationChat = () => {
 
         // Check if the response contains "intended users" and add photographer requirements directly
         if (aiResponse.main_response.toLowerCase().includes("intended users")) {
-          const currentTime = new Date().toLocaleTimeString();
-          const newRequirements = photographerRequirements.map(
-            (req, index) => ({
-              id: Date.now() + index,
-              description: req,
-              timestamp: currentTime,
-            })
-          );
-
-          setRequirements((prev) => [...prev, ...newRequirements]);
+          setRequirements((prev) => [...prev, ...photographerRequirements]);
         }
 
         // Handle any additional suggestions from the AI
