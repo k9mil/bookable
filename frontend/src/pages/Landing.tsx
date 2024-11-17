@@ -3,7 +3,7 @@ import { toast } from "sonner";
 
 const Index = () => {
   const handleGetStarted = () => {
-    window.location.href = "/consult";
+    window.location.href = "/customers";
   };
 
   return (
