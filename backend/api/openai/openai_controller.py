@@ -26,6 +26,8 @@ def handle_initial_state(request: ChatRequest):
         user_message=request.user_message,
     )
     cleaned_response = response.strip()
+    print(1)
+    print(cleaned_response)
 
     try:
         parsed_response = json.loads(cleaned_response)
@@ -55,6 +57,8 @@ def handle_final_state(request: ChatRequest):
         user_message=request.user_message,
     )
     cleaned_response = response.strip()
+    print(2)
+    print(cleaned_response)
 
     try:
         parsed_response = json.loads(cleaned_response)
@@ -103,6 +107,14 @@ async def prd_to_json(request: PRDResponse = Body(...)):
         prd_json = prd_json.strip('`')
         prd_json = prd_json.replace("json", "")
         prd_json = prd_json.replace("null", "0")
+        prd_json = prd_json.replace("`", "").strip()
+
+        json_start = prd_json.find("{")
+        json_end = prd_json.rfind("}") + 1
+        prd_json = prd_json[json_start:json_end]
+
+        print(1)
+        print(prd_json)
 
         if not prd_json:
             raise HTTPException(status_code=500, detail="Empty response from prd_to_summary")
