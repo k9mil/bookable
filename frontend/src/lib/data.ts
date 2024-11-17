@@ -18,23 +18,22 @@ export interface PRD {
 export const samplePRDs: PRD[] = [
   {
     id: "1",
-    title: "Local Marketplace App",
+    title: "Photography Portfolio Website",
     description:
-      "A digital marketplace that enables local artisans to showcase and sell their handcrafted products directly to community members. The platform simplifies the buying process with basic vendor profiles and a straightforward search system.",
+      "A personal photography showcase platform that displays curated images and enables art enthusiasts to experience the photographer's unique perspective. The site features a streamlined gallery, integrated donation support for appreciative viewers, and a direct contact system for booking professional services. The platform serves both photography aficionados seeking artistic inspiration and potential clients interested in commissioning work.",
     author: "Sarah Chen",
-    date: "2024-02-15",
+    date: "2024-11-17",
     status: "View Summary",
     version: "1.0 - Draft",
     keyFeatures: [
-      "Basic vendor profiles",
-      "Product listings",
-      "Simple search function",
-      "Contact form",
+      "Display image gallery",
+      "Donation support for viewers",
+      "Direct contact form for booking services",
     ],
     timeline: {
-      development: "2-3 weeks",
-      mvp: "1 week",
-      budget: "£2K-3K",
+      development: "11 weeks",
+      mvp: "8 week",
+      budget: "£2K",
     },
     imageUrl:
       "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=400",

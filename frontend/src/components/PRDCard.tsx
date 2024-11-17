@@ -7,7 +7,6 @@ export interface PRD {
   description: string;
   author: string;
   date: string;
-  status: "Draft" | "In Review" | "Approved" | "Implemented" | "In Progress";
   version: string;
   keyFeatures: string[];
   timeline: {
