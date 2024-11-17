@@ -3,7 +3,7 @@ import { ChatMessage } from "@/components/ChatMessage";
 import { SuggestionCard } from "@/components/SuggestionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send, X, CheckCircle } from "lucide-react";
+import { Send, X, CheckCircle, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import AudioRecorder from "./AudioRecorder";
@@ -259,6 +259,23 @@ const ConsultationChat = () => {
         </div>
       </div>
       <div className="w-80 bg-accent p-4 overflow-y-auto scrollbar-hide">
+        <h2 className="text-lg font-semibold mb-2">Consultant</h2>
+        <div className="flex items-center gap-4 p-4 rounded-lg shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Sam_Altman_TechCrunch_SF_2019_Day_2_Oct_3_%28cropped%29_%28cropped%29.jpg"
+              alt="Sam Altman"
+              className="w-12 h-12 rounded-full object-cover"
+            />
+          </div>
+          <div>
+            <h3 className="font-medium text-base">Sam Altman</h3>
+            <p className="text-sm text-muted-foreground">
+              5+ years of e/acc experience
+            </p>
+          </div>
+        </div>
+
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Current Requirements</h2>
@@ -284,7 +301,6 @@ const ConsultationChat = () => {
             </p>
           )}
         </div>
-
         <div>
           <h2 className="text-lg font-semibold mb-4">Suggested Requirements</h2>
           {suggestions.filter((s) => s.visible).length > 0 ? (
