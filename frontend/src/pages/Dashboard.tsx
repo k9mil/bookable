@@ -10,7 +10,7 @@ import { toast } from "sonner";
 const Dashboard = () => {
   const [requirements, setRequirements] = useState([]);
   const [milestones, setMilestones] = useState([]);
-  const [budget, setBudget] = useState(0);
+  const [budget, setBudget] = useState(2000);
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -5,6 +5,7 @@ interface BudgetCardProps {
 }
 
 const BudgetCard = ({ content }: BudgetCardProps) => {
+  console.log(content);
   return (
     <div className="card animate-fade-in animate-delay-1">
       <h2 className="text-xl font-semibold mb-4">Budget Overview</h2>
@@ -15,12 +16,8 @@ const BudgetCard = ({ content }: BudgetCardProps) => {
         </div>
         <Progress value={50} className="h-2 bg-gray-800" />
         <div className="flex justify-between text-sm">
-          <span className="text-gray-400">
-            Used: £{Math.floor(content * 0.5)}
-          </span>
-          <span className="text-gray-300">
-            Available: £{Math.floor(content * 0.5)}
-          </span>
+          <span className="text-gray-400">Used: £0</span>
+          <span className="text-gray-300">Available: £{content}</span>
         </div>
       </div>
     </div>
