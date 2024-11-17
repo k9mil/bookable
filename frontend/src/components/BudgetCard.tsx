@@ -15,8 +15,12 @@ const BudgetCard = ({ content }: BudgetCardProps) => {
         </div>
         <Progress value={50} className="h-2 bg-gray-800" />
         <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Used: ${Math.floor(content * 0.5)}</span>
-          <span className="text-gray-300">Available: £{Math.floor(content * 0.5)}</span>
+          <span className="text-gray-400">
+            Used: £{Math.floor(content * 0.5)}
+          </span>
+          <span className="text-gray-300">
+            Available: £{Math.floor(content * 0.5)}
+          </span>
         </div>
       </div>
     </div>
