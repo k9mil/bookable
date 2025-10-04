@@ -1,12 +1,21 @@
 # bookable
 
-We built bookable, an AI-powered consultation platform that transforms rough client ideas into comprehensive Product Requirements Documents (PRDs) through conversational AI.
+We built bookable, an AI-powered consultation platform that transforms rough client ideas into comprehensive _Product Requirements Documents (PRDs)_ through conversational AI.
+
+Through our combined experiences at software agencies, we knew that converting leads was an expensive and timesinking task. Our research uncovered that:
+
+- 9/10 leads don't convert
+- 80% of clients don’t know what they want
+- 4 hours is spent on each client, on average
+
+Which is why we built bookable. After reaching out to 170+ freelancers throughout the hackathon, we even got some on our waitlist.
 
 ![Bookable Product](https://github.com/user-attachments/assets/c93888cd-d0d7-49f7-a45a-122d1f43971e)
 
 ## 🎯 Project Overview
 
-*bookable* streamlines the client onboarding process for consultants and agencies by using AI to:
+_bookable_ streamlines the client onboarding process for consultants and agencies by using AI to:
+
 - Conduct intelligent consultations with clients
 - Gather requirements through natural conversation
 - Generate professional PRD documents automatically
@@ -14,7 +23,7 @@ We built bookable, an AI-powered consultation platform that transforms rough cli
 
 ## 🌟 Hackathon Achievement
 
-This project was built during the Entrepreneur First Fall 2024 Hackathon and received **4th place** with an honorable mention *(some judges gave us third)*!
+This project was built during the Entrepreneur First Fall 2024 Hackathon and received **4th place** with an honorable mention _(some judges gave us third)_!
 
 ## 💻 Tech Stack
 
@@ -35,6 +44,7 @@ https://github.com/user-attachments/assets/19f0a34c-018f-42ee-a929-1c33e59e9dde
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js (v20+)
 - Python 3.12+
 - OpenAI API Key
