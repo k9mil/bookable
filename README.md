@@ -6,8 +6,7 @@ We built bookable, an AI-powered consultation platform that transforms rough cli
 
 ## 🎯 Project Overview
 
-_bookable_ streamlines the client onboarding process for consultants and agencies by using AI to:
-
+*bookable* streamlines the client onboarding process for consultants and agencies by using AI to:
 - Conduct intelligent consultations with clients
 - Gather requirements through natural conversation
 - Generate professional PRD documents automatically
@@ -15,7 +14,7 @@ _bookable_ streamlines the client onboarding process for consultants and agencie
 
 ## 🌟 Hackathon Achievement
 
-This project was built during the Entrepreneur First Fall 2024 Hackathon and received **4th place** with an honorable mention _(some judges gave us third)_!
+This project was built during the Entrepreneur First Fall 2024 Hackathon and received **4th place** with an honorable mention *(some judges gave us third)*!
 
 ## 💻 Tech Stack
 
@@ -29,12 +28,13 @@ This project was built during the Entrepreneur First Fall 2024 Hackathon and rec
 
 ## 🎬 Demo
 
-The video below shows an example run-through of the bookable platform, which includes showcasing the requirement gathering through natural conversation, project estimation, and general look & feel of the system.
+The video below shows an example run-through of the bookable platform, which includes showcasing the requirement gathering through natural conversation, project estimation, and general look & feel of the system. The slides are available [here](./assets/bookable-pitch.pdf).
+
+https://github.com/user-attachments/assets/19f0a34c-018f-42ee-a929-1c33e59e9dde
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js (v20+)
 - Python 3.12+
 - OpenAI API Key
