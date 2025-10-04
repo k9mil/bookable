@@ -26,11 +26,7 @@ export const SuggestionCard = ({
           <Check className="w-4 h-4 mr-2" />
           Accept
         </Button>
-        <Button
-          onClick={onDecline}
-          variant="outline"
-          className="flex-1"
-        >
+        <Button onClick={onDecline} variant="outline" className="flex-1">
           <X className="w-4 h-4 mr-2" />
           Decline
         </Button>

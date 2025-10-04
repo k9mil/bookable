@@ -5,7 +5,6 @@ interface BudgetCardProps {
 }
 
 const BudgetCard = ({ content }: BudgetCardProps) => {
-  console.log(content);
   return (
     <div className="card animate-fade-in animate-delay-1">
       <h2 className="text-xl font-semibold mb-4">Budget Overview</h2>

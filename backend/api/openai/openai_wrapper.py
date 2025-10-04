@@ -3,6 +3,7 @@ import json
 from typing import List
 from io import BytesIO
 
+
 class OpenAIWrapper:
     def __init__(self) -> None:
         self.client = OpenAI()
@@ -130,8 +131,6 @@ THIS IS A JSON FORMAT.
 }
 """
 
-
-
     def prompt_chat(
         self,
         current_state: dict,
@@ -144,7 +143,10 @@ THIS IS A JSON FORMAT.
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": self.prompt},
-                    {"role": "user", "content": f"Current State: {json.dumps(current_state)}"},
+                    {
+                        "role": "user",
+                        "content": f"Current State: {json.dumps(current_state)}",
+                    },
                     {"role": "user", "content": user_message},
                 ],
                 max_tokens=max_tokens,
@@ -168,9 +170,18 @@ THIS IS A JSON FORMAT.
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": self.prompt_second},
-                    {"role": "user", "content": f"Previous users' Requests: {json.dumps(current_state)}"},
-                    {"role": "user", "content": f"Requirements: {json.dumps(current_requirements)}"},
-                    {"role": "user", "content": f"Rejected Requirements: {json.dumps(rejected_requirements)}"},
+                    {
+                        "role": "user",
+                        "content": f"Previous users' Requests: {json.dumps(current_state)}",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Requirements: {json.dumps(current_requirements)}",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Rejected Requirements: {json.dumps(rejected_requirements)}",
+                    },
                     {"role": "user", "content": user_message},
                 ],
                 max_tokens=max_tokens,
@@ -181,11 +192,11 @@ THIS IS A JSON FORMAT.
             raise Exception(f"Error calling OpenAI API: {str(e)}")
 
     def generate_prd(self, requirements: List[str], current_state: dict) -> str:
-        formatted_requirements = "\n".join([f"- {req}" for req in requirements]).join(f"\nCurrent State: {json.dumps(current_state)}")
+        formatted_requirements = "\n".join([f"- {req}" for req in requirements]).join(
+            f"\nCurrent State: {json.dumps(current_state)}"
+        )
         prompt = self.prd_prompt.format(requirements=formatted_requirements)
 
-        print(prompt)
-        
         try:
             chat_completion = self.client.chat.completions.create(
                 model="gpt-4o",
@@ -193,22 +204,22 @@ THIS IS A JSON FORMAT.
                     {"role": "system", "content": prompt},
                 ],
                 temperature=0,
-                max_tokens=1000   # Limited length
+                max_tokens=1000,  # Limited length
             )
             return str(chat_completion.choices[0].message.content)
         except Exception as e:
             raise Exception(f"Error generating PRD: {str(e)}")
-        
+
     def prd_to_summary(self, prd: str) -> str:
         try:
             chat_completion = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": self.prd_to_json_prompt},
-                    {"role": "user", "content": prd}
+                    {"role": "user", "content": prd},
                 ],
                 temperature=0,
-                max_tokens=1000
+                max_tokens=1000,
             )
             return str(chat_completion.choices[0].message.content)
         except Exception as e:
@@ -221,14 +232,14 @@ THIS IS A JSON FORMAT.
         )
 
         return transcription.text
-    
+
     def prd_to_dashboard(self, prd: str) -> str:
         try:
             chat_completion = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
                     {"role": "system", "content": self.prd_to_dashboard_prompt},
-                    {"role": "user", "content": prd}
+                    {"role": "user", "content": prd},
                 ],
             )
             return str(chat_completion.choices[0].message.content)

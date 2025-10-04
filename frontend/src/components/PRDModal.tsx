@@ -13,7 +13,11 @@ type PRDModalProps = {
   projectInfo: Partial<ProjectInfo>;
 };
 
-export const PRDModal = ({ open, onOpenChange, projectInfo }: PRDModalProps) => (
+export const PRDModal = ({
+  open,
+  onOpenChange,
+  projectInfo,
+}: PRDModalProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent className="max-w-2xl">
       <DialogHeader>

@@ -1,10 +1,17 @@
 import json
-from typing import Union, List
+from typing import Union
 from fastapi import HTTPException, APIRouter, Body, UploadFile, File
 from io import BytesIO
-from api.openai.openai_schemas import ChatResponse, CurrentState, DashboardResponse, FinalState, ChatRequest, PRDRequest, PRDResponse
+from api.openai.openai_schemas import (
+    ChatResponse,
+    CurrentState,
+    DashboardResponse,
+    FinalState,
+    ChatRequest,
+    PRDRequest,
+    PRDResponse,
+)
 from api.openai.openai_wrapper import OpenAIWrapper
-from fastapi.responses import JSONResponse
 
 
 openai_router = APIRouter()
@@ -26,8 +33,6 @@ def handle_initial_state(request: ChatRequest):
         user_message=request.user_message,
     )
     cleaned_response = response.strip()
-    print(1)
-    print(cleaned_response)
 
     try:
         parsed_response = json.loads(cleaned_response)
@@ -46,19 +51,22 @@ def handle_initial_state(request: ChatRequest):
         main_response=parsed_response["main_response"],
     )
 
+
 def handle_final_state(request: ChatRequest):
     """
     Handles the final state where we gather the suggested requirements.
     """
     response = openai_wrapper.suggestion_gathering(
         current_state=request.current_state.model_dump(),
-        current_requirements=request.current_requirements if request.current_requirements else [],
-        rejected_requirements=request.rejected_requirements if request.rejected_requirements else [],
+        current_requirements=request.current_requirements
+        if request.current_requirements
+        else [],
+        rejected_requirements=request.rejected_requirements
+        if request.rejected_requirements
+        else [],
         user_message=request.user_message,
     )
     cleaned_response = response.strip()
-    print(2)
-    print(cleaned_response)
 
     try:
         parsed_response = json.loads(cleaned_response)
@@ -71,40 +79,40 @@ def handle_final_state(request: ChatRequest):
         main_response=parsed_response["main_response"],
     )
 
+
 @openai_router.post("/api/v1/model", response_model=Union[ChatResponse, FinalState])
 async def chat(request: ChatRequest) -> Union[ChatResponse, FinalState]:
     global done_flag
 
     try:
-        if not done_flag: return handle_initial_state(request)
-        else: return handle_final_state(request)
+        if not done_flag:
+            return handle_initial_state(request)
+        else:
+            return handle_final_state(request)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @openai_router.post("/api/v1/generate-prd", response_model=PRDResponse)
 async def generate_prd(request: PRDRequest = Body(...)):
     try:
         if not request.requirements:
-            raise HTTPException(
-                status_code=400, 
-                detail="Requirements list is required"
-            )
-            
+            raise HTTPException(status_code=400, detail="Requirements list is required")
+
         prd_content = openai_wrapper.generate_prd(
-            request.requirements,
-            request.current_state.model_dump()
+            request.requirements, request.current_state.model_dump()
         )
         return PRDResponse(prd=prd_content)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-@openai_router.post("/api/v1/prd-to-json", response_model=DashboardResponse)
 
+
+@openai_router.post("/api/v1/prd-to-json", response_model=DashboardResponse)
 async def prd_to_json(request: PRDResponse = Body(...)):
     try:
         prd_json = openai_wrapper.prd_to_summary(request.prd)
 
-        prd_json = prd_json.strip('`')
+        prd_json = prd_json.strip("`")
         prd_json = prd_json.replace("json", "")
         prd_json = prd_json.replace("null", "0")
         prd_json = prd_json.replace("`", "").strip()
@@ -113,26 +121,30 @@ async def prd_to_json(request: PRDResponse = Body(...)):
         json_end = prd_json.rfind("}") + 1
         prd_json = prd_json[json_start:json_end]
 
-        print(1)
-        print(prd_json)
-
         if not prd_json:
-            raise HTTPException(status_code=500, detail="Empty response from prd_to_summary")
+            raise HTTPException(
+                status_code=500, detail="Empty response from prd_to_summary"
+            )
 
         parsed_response = json.loads(prd_json)
-        
-        if "requirements" not in parsed_response or "milestones" not in parsed_response or "budget" not in parsed_response:
+
+        if (
+            "requirements" not in parsed_response
+            or "milestones" not in parsed_response
+            or "budget" not in parsed_response
+        ):
             raise HTTPException(status_code=500, detail="Invalid JSON structure")
 
         return DashboardResponse(
             requirements=parsed_response["requirements"],
             milestones=parsed_response["milestones"],
-            budget=parsed_response["budget"]
+            budget=parsed_response["budget"],
         )
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=500, detail=f"JSON Decode Error: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @openai_router.post("/api/v1/audio")
 async def transcribe_audio_endpoint(file: UploadFile = File(...)):
@@ -143,6 +155,5 @@ async def transcribe_audio_endpoint(file: UploadFile = File(...)):
 
     open_ai_wrapper = OpenAIWrapper()
     transcription_result = open_ai_wrapper.transcribe_audio(buffer)
-    
-    return {"openai_transcript_output": transcription_result}
 
+    return {"openai_transcript_output": transcription_result}

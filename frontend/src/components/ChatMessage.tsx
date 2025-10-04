@@ -9,10 +9,7 @@ interface ChatMessageProps {
 export const ChatMessage = ({ message, isAi, timestamp }: ChatMessageProps) => {
   return (
     <div
-      className={cn(
-        "flex w-full mb-4",
-        isAi ? "justify-start" : "justify-end"
-      )}
+      className={cn("flex w-full mb-4", isAi ? "justify-start" : "justify-end")}
     >
       <div
         className={cn(
