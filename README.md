@@ -1,55 +1,42 @@
-# 📝 bookable - AI-Powered PRD Generator
+# bookable
 
-> 🏆 **4th Place with Honorable Mention** at EF Hackathon
+We built bookable, an AI-powered consultation platform that transforms rough client ideas into comprehensive Product Requirements Documents (PRDs) through conversational AI.
 
-An AI-powered consultation platform that transforms rough client ideas into comprehensive Product Requirements Documents (PRDs) through conversational AI.
+![Bookable Product](https://github.com/user-attachments/assets/c93888cd-d0d7-49f7-a45a-122d1f43971e)
 
 ## 🎯 Project Overview
 
-**bookable** streamlines the client onboarding process for consultants and agencies by using AI to:
+_bookable_ streamlines the client onboarding process for consultants and agencies by using AI to:
+
 - Conduct intelligent consultations with clients
 - Gather requirements through natural conversation
 - Generate professional PRD documents automatically
 - Provide structured project summaries with timelines and budgets
 
-[📊 View Pitch Deck](./Pitch.pdf)
-
 ## 🌟 Hackathon Achievement
 
-This project was built during the EF Hackathon and received **4th place with an honorable mention**.
+This project was built during the Entrepreneur First Fall 2024 Hackathon and received **4th place** with an honorable mention _(some judges gave us third)_!
 
----
+## 💻 Tech Stack
 
-## ✨ Key Features
+- [Lovable](https://lovable.dev/) – for rapid prototyping
+- [Python](https://www.python.org/) – backend language
+- [FastAPI](https://fastapi.tiangolo.com/) – backend framework
+- [TypeScript](https://www.typescriptlang.org/) – frontend language
+- [React](https://react.dev/) – frontend framework
+- [OpenAI](https://openai.com/) – LLM & transcription models
+- [shadcn/ui](https://ui.shadcn.com/) – the standard for components
 
-- 🤖 **AI-Powered Conversations** - GPT-4o driven chat interface that guides clients through requirements gathering
-- 🎤 **Voice Input** - Audio recording with automatic transcription using Whisper API
-- 📋 **Smart Requirements Tracking** - Accepts/rejects feature suggestions intelligently
-- 📄 **Automatic PRD Generation** - Converts conversations into professional documents
-- 📊 **Dashboard Analytics** - Structured view of requirements, timelines, and budgets
-- 🎨 **Modern UI** - Clean, responsive interface built with React and shadcn/ui
+## 🎬 Demo
 
-## 🛠️ Tech Stack
-
-### Frontend
-- React 18 + TypeScript
-- Vite
-- shadcn/ui (Radix UI)
-- Tailwind CSS
-- React Router
-- TanStack Query
-
-### Backend
-- Python FastAPI
-- OpenAI API (GPT-4o & Whisper)
-- Pydantic
-- Uvicorn
+The video below shows an example run-through of the bookable platform, which includes showcasing the requirement gathering through natural conversation, project estimation, and general look & feel of the system.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18+)
-- Python 3.8+
+
+- Node.js (v20+)
+- Python 3.12+
 - OpenAI API Key
 
 ### Frontend Setup
@@ -60,33 +47,25 @@ npm install
 npm run dev
 ```
 
-The frontend will run on `http://localhost:5173`
+After the frontend setup, the server will run on `http://localhost:8080`.
 
 ### Backend Setup
 
 ```bash
 cd backend
-pip install -r requirements.txt
 
-# Set your OpenAI API key
+uv init
+uv install -r requirements.txt
 export OPENAI_API_KEY='your-api-key-here'
 
-# Run the server
 python asgi.py
 ```
 
-The backend will run on `http://127.0.0.1:5000`
+After the backend setup, the server will run on `http://127.0.0.1:5000`.
 
-## 📖 How It Works
+## Team
 
-1. **Initial Consultation** - AI asks targeted questions to understand the product idea
-2. **Requirements Gathering** - System suggests features and tracks client preferences
-3. **PRD Generation** - AI creates a comprehensive PRD document
-4. **Dashboard View** - Presents structured summary with actionable insights
-
-## 🎨 Application Flow
-
-```
-Landing Page → Customer Dashboard → AI Consultation → PRD Document → Summary Dashboard
-```
-
+- <a href="https://www.linkedin.com/in/kamilzak00/">Kamil Zak</a>
+- <a href="https://www.linkedin.com/in/fabian-salge/">Fabian Salge</a>
+- <a href="https://www.linkedin.com/in/finley-braund/">Finley Braund</a>
+- <a href="https://www.linkedin.com/in/ethan-luc/">Ethan Luc</a>
